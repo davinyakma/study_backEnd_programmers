@@ -2,46 +2,60 @@ package com.programmers.month11;
 
 public class study_11_21_05 {
     public static void main(String[] args) {
-        사람3 a사람 = new 사람3();
-        사람3 a사람2 = new 사람3("홍길순", 55);
+        System.out.println("== 사람객체 생성시작 ==");
+        new 사람3();
+        System.out.println("== 사람객체 생성끝 ==");
 
-        new 노루();
+        System.out.println("== 청둥오리객체 생성시작 ==");
+        new 청둥오리1();
+        System.out.println("== 청둥오리객체 생성끝 ==");
+		/* 출력
+		== 청둥오리객체 생성시작 ==
+		생물이 생성되었습니다.
+		동물이 생성되었습니다.
+		오리가 생성되었습니다.
+		청둥오리 생성되었습니다.
+		== 청둥오리객체 생성끝 ==
+		*/
     }
 }
 
-class 동물1 {
-    동물1() {
-        System.out.println("동물 생성자 호출");
+class 생물 {
+    생물() {
+        // 이 함수는 부모 클래스 생성자를 자동으로 호출합니다.
+        System.out.println("생물이 생성되었습니다.");
     }
+}
+
+class 동물1 extends 생물 {
+    동물1() {
+        // super(); // 부모 클래스의 생성자를 호출합니다. 생략가능합니다.
+        // 이 함수는 부모 클래스 생성자를 자동으로 호출합니다.
+
+        System.out.println("동물이 생성되었습니다.");
+    }
+
 }
 
 class 사람3 extends 동물1 {
-    String 이름;
-    int 나이;
 
     사람3() {
-        super(); // 이 코드는 생략해도 함수 제일 윗 부분에서 자동으로 호출된다.
+        // 부모 클래스의 생성자를 호출합니다. 생략가능
+        // 이 함수는 부모 클래스 생성자를 호출합니다.
+        super();
 
-        this.이름 = "홍길동";
-        this.나이 = 22;
-    }
-
-    사람3(String 이름, int 나이) {
-        // super(); // 이 코드는 생략해도 함수 제일 윗 부분에서 자동으로 호출된다.
-
-        this.이름 = 이름;
-        this.나이 = 나이;
+        System.out.println("사람이 생성되었습니다.");
     }
 }
 
-class 노루 extends 동물1 {
-    String 이름;
-    int 나이;
-
-    // 생성자를 직접 정의하지 않는다면 아래와 같은 생성자가 자동으로 추가된다.
-    /*
-    노루() {
-        super();
+class 오리1 extends 동물1 {
+    오리1() {
+        System.out.println("오리가 생성되었습니다.");
     }
-    */
+}
+
+class 청둥오리1 extends 오리1 {
+    청둥오리1() {
+        System.out.println("청둥오리 생성되었습니다.");
+    }
 }
