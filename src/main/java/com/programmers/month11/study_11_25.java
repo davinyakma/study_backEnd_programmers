@@ -2,6 +2,7 @@ package com.programmers.month11;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class study_11_25 {
     // 스트림 사용
@@ -11,7 +12,7 @@ public class study_11_25 {
         people.add(new Person(2, "Bob", 25, 'M'));
         people.add(new Person(3, "David", 35, 'M'));
 
-        // 문제 : 남성들의 나이의 평균
+        // 문제 : 남성의 이름들
 
         System.out.println("== No Stream ==");
         noStreamVersion(people);
@@ -21,31 +22,28 @@ public class study_11_25 {
     }
 
     private static void noStreamVersion(List<Person> people) {
-        int sum = 0;
-        int itemsOfMan = 0;
+        List<String> names = new ArrayList<>();
 
         for (Person person : people) {
             if (person.getGender() == 'M') {
-                sum += person.getAge();
-                itemsOfMan++;
+                names.add(person.getName());
             }
         }
 
-        double avg = (double) sum / itemsOfMan; //자바는 정수 / 정수 일때 몫과 나머지를 구하기 때문에
-        // 소수점으로 바꾸려면 피연산자 중 하나를 double로 형변환 해야 함.
+        String manNames = String.join(", ", names);
 
-        System.out.println("avg of age : " + avg);
+        System.out.println("manNames : " + manNames);
     }
 
+    //.map(person -> person.getName)과 같음 .map(person::getName)
+    // 왜 mapToObj로 안 했는가? String사람 이름은 원래도 레퍼런스 타입이여서 필요없음.
     private static void streamVersion(List<Person> people) {
-        double avg = people
-                .stream()
-                .filter(e -> e.getGender() == 'M')
-                .mapToInt(e -> e.getAge())
-                .average()//OptionalDouble은 double일 수도 있고 아닐 수도 있다는 뜻
-                .orElse(0); //아닌 경우(null)에 0으로 치환
+        String manNames = people.stream()
+                .filter(person -> person.getGender() == 'M')
+                .map(Person::getName)
+                .collect(Collectors.joining(", ")); //이름들 사이에 구분자 ","로 설정
 
-        System.out.println("avg of age : " + avg);
+        System.out.println("manNames : " + manNames);
     }
 }
 
