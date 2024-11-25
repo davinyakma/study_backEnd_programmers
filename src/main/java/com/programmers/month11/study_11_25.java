@@ -2,7 +2,7 @@ package com.programmers.month11;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 public class study_11_25 {
     // 스트림 사용
@@ -22,28 +22,38 @@ public class study_11_25 {
     }
 
     private static void noStreamVersion(List<Person> people) {
-        List<String> names = new ArrayList<>();
+        Person found = null; // 검색 결과를 저장할 변수 초기화
 
-        for (Person person : people) {
-            if (person.getGender() == 'M') {
-                names.add(person.getName());
+        for (Person person : people) { // 리스트의 모든 요소를 반복
+            if (person.getId() == 2) { // id가 2인 객체를 찾으면
+                found = person; // 찾은 객체를 found에 저장
+                break; // 반복문 종료
             }
         }
 
-        String manNames = String.join(", ", names);
+        if (found == null) { // 찾지 못한 경우
+            System.out.println("not found"); // 'not found' 출력
+            return; // 메서드 종료
+        }
 
-        System.out.println("manNames : " + manNames);
+        System.out.println("found : " + found.getName()); // 찾은 객체의 이름 출력
     }
 
-    //.map(person -> person.getName)과 같음 .map(person::getName)
-    // 왜 mapToObj로 안 했는가? String사람 이름은 원래도 레퍼런스 타입이여서 필요없음.
     private static void streamVersion(List<Person> people) {
-        String manNames = people.stream()
-                .filter(person -> person.getGender() == 'M')
-                .map(Person::getName)
-                .collect(Collectors.joining(", ")); //이름들 사이에 구분자 ","로 설정
+        Optional<Person> opPerson = people.stream() // 스트림 생성
+                .filter(e -> e.getId() == 2) // 조건에 맞는 객체 필터링
+                .findFirst(); // 첫 번째로 조건을 만족하는 객체를 찾음
 
-        System.out.println("manNames : " + manNames);
+        Person found = opPerson.orElse(null); // Optional이 비어 있으면 null 반환
+        //Optional 사용 : 값이 없을 때 null을 리턴하지 않도록 방지.
+        //값의 존재 여부를 간단하게 확인 가능.
+        //NullPointerException 방지.
+        if (found == null) { // 찾지 못한 경우
+            System.out.println("not found"); // 'not found' 출력
+            return; // 메서드 종료
+        }
+
+        System.out.println("found : " + found.getName()); // 찾은 객체의 이름 출력
     }
 }
 
