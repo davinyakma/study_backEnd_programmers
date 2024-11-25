@@ -1,27 +1,74 @@
 package com.programmers.month11;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class study_11_25 {
     // 스트림 사용
     public static void main(String[] args) {
-        // v1
-        List<Integer> list1 = Arrays
-                .stream(new int[]{10, 20, 30})
-                .mapToObj(e -> e) // int => Integer. 값을 바꾸면서 타입로 레퍼런스로 바꿀 수 있음.
-                .toList();
+        List<Person> people = new ArrayList<>();
+        people.add(new Person(1, "Alice", 20, 'F'));
+        people.add(new Person(2, "Bob", 25, 'M'));
+        people.add(new Person(3, "David", 35, 'M'));
 
-        // v2
-        List<Integer> list2 = Arrays
-                .stream(new int[]{10, 20, 30})
-                .boxed() // int => Integer. 타입만 레퍼런스로 바꿀 수 있음. mapToObj의 제한된 형태
-                .toList();
+        // 문제 : 남성들의 나이의 합
 
-        // v3 : 이 경우는 래핑(boxing)할 필요가 없다.
-        List<Integer> list3 = Arrays
-                .stream(new Integer[]{10, 20, 30}) //이미 형태가 Integer레퍼런스타입이라서 mapToObj필요 없음.
-                .toList();
+        System.out.println("== No Stream ==");
+        noStreamVersion(people);
+
+        System.out.println("== Stream ==");
+        streamVersion(people);
     }
-    //레퍼런스 타입에서 int타입으로 매핑할 때 : mapToInt 이런식으로 사용 가능
+
+    private static void noStreamVersion(List<Person> people) {
+        int sum = 0;
+
+        for (Person person : people) {
+            if (person.getGender() == 'M') {
+                sum += person.getAge();
+            }
+        }
+
+        System.out.println("sum of age : " + sum);
+    }
+
+    private static void streamVersion(List<Person> people) {
+        int sum = people
+                .stream()
+                .filter(e -> e.getGender() == 'M') //'M' 남자인 경우만 필터링
+                .mapToInt(e -> e.getAge()) //나이를 레퍼런스 타입에서 Int로 변경시켜서
+                .sum(); //sum함수로 더하기
+
+        System.out.println("sum of age : " + sum);
+    }
+}
+
+class Person {
+    private int id;
+    private String name;
+    private int age;
+    private char gender;
+
+    public Person(int id, String name, int age, char gender) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public char getGender() {
+        return gender;
+    }
 }
